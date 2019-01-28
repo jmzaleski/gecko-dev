@@ -244,6 +244,21 @@ VARCACHE_PREF(
   RelaxedAtomicBool, true
 )
 
+// Should we defer timeouts and intervals while loading a page.  Released
+// on Idle or when the page is loaded.
+VARCACHE_PREF(
+  "dom.timeout.defer_during_load",
+  dom_timeout_defer_during_load,
+  bool, true
+)
+
+// Maximum deferral time for setTimeout/Interval in milliseconds
+VARCACHE_PREF(
+  "dom.timeout.max_idle_defer_ms",
+  dom_timeout_max_idle_defer_ms,
+  uint32_t, 10*1000
+)
+
 VARCACHE_PREF(
   "dom.performance.children_results_ipc_timeout",
   dom_performance_children_results_ipc_timeout,
@@ -1799,16 +1814,6 @@ VARCACHE_PREF(
   "network.predictor.doing-tests",
    network_predictor_doing_tests,
   bool, false
-)
-
-//---------------------------------------------------------------------------
-// ContentSessionStore prefs
-//---------------------------------------------------------------------------
-// Maximum number of bytes of DOMSessionStorage data we collect per origin.
-VARCACHE_PREF(
-  "browser.sessionstore.dom_storage_limit",
-  browser_sessionstore_dom_storage_limit,
-  uint32_t, 2048
 )
 
 //---------------------------------------------------------------------------

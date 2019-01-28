@@ -287,7 +287,7 @@ void ReportBlockingToConsole(nsPIDOMWindowOuter* aWindow, nsIURI* aURI,
 
   nsCOMPtr<nsIURI> uri(aURI);
 
-  nsresult rv = NS_IdleDispatchToCurrentThread(
+  nsresult rv = NS_DispatchToCurrentThreadQueue(
       NS_NewRunnableFunction(
           "ReportBlockingToConsoleDelayed",
           [doc, sourceLine, lineNumber, columnNumber, uri, aRejectedReason]() {
@@ -330,12 +330,6 @@ void ReportBlockingToConsole(nsPIDOMWindowOuter* aWindow, nsIURI* aURI,
             NS_ENSURE_SUCCESS_VOID(rv);
 
             NS_ConvertUTF8toUTF16 spec(exposableURI->GetSpecOrDefault());
-            bool overflows = spec.Length() > sMaxSpecLength;
-            spec.Truncate(std::min(spec.Length(), sMaxSpecLength));
-            if (overflows) {
-              NS_NAMED_LITERAL_STRING(kEllipsis, u"\x2026");
-              spec.Append(kEllipsis);
-            }
             const char16_t* params[] = {spec.get()};
 
             nsContentUtils::ReportToConsole(
@@ -344,7 +338,7 @@ void ReportBlockingToConsole(nsPIDOMWindowOuter* aWindow, nsIURI* aURI,
                 ArrayLength(params), nullptr, sourceLine, lineNumber,
                 columnNumber);
           }),
-      kMaxConsoleOutputDelayMs);
+      kMaxConsoleOutputDelayMs, EventQueuePriority::Idle);
   if (NS_WARN_IF(NS_FAILED(rv))) {
     return;
   }
@@ -380,7 +374,7 @@ void ReportUnblockingToConsole(
     nsJSUtils::GetCallingLocation(cx, sourceLine, &lineNumber, &columnNumber);
   }
 
-  nsresult rv = NS_IdleDispatchToCurrentThread(
+  nsresult rv = NS_DispatchToCurrentThreadQueue(
       NS_NewRunnableFunction(
           "ReportUnblockingToConsoleDelayed",
           [doc, principal, trackingOrigin, grantedOrigin, sourceLine,
@@ -428,7 +422,7 @@ void ReportUnblockingToConsole(
                   params, 3, nullptr, sourceLine, lineNumber, columnNumber);
             }
           }),
-      kMaxConsoleOutputDelayMs);
+      kMaxConsoleOutputDelayMs, EventQueuePriority::Idle);
   if (NS_WARN_IF(NS_FAILED(rv))) {
     return;
   }

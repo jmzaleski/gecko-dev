@@ -858,6 +858,8 @@ pref("browser.sessionstore.debug", false);
 pref("browser.sessionstore.debug.no_auto_updates", false);
 // Forget closed windows/tabs after two weeks
 pref("browser.sessionstore.cleanup.forget_closed_after", 1209600000);
+// Maximum number of bytes of DOMSessionStorage data we collect per origin.
+pref("browser.sessionstore.dom_storage_limit", 2048);
 // Amount of failed SessionFile writes until we restart the worker.
 pref("browser.sessionstore.max_write_failures", 5);
 
@@ -1175,6 +1177,7 @@ pref("services.sync.prefs.sync.addons.ignoreUserEnabledChanges", true);
 // uncompromised Sync-connected devices.
 pref("services.sync.prefs.sync.browser.contentblocking.category", true);
 pref("services.sync.prefs.sync.browser.contentblocking.introCount", true);
+pref("services.sync.prefs.sync.browser.crashReports.unsubmittedCheck.autoSubmit2", true);
 pref("services.sync.prefs.sync.browser.ctrlTab.recentlyUsedOrder", true);
 pref("services.sync.prefs.sync.browser.download.useDownloadDir", true);
 pref("services.sync.prefs.sync.browser.formfill.enable", true);
